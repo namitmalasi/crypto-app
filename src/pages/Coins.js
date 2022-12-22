@@ -65,6 +65,7 @@ const Coins = () => {
           <HStack w={"full"} overflowX={"auto"} p="8">
             {btns.map((item, index) => (
               <Button
+                key={index}
                 bgColor={"blackAlpha.900"}
                 color={"white"}
                 onClick={() => changePage(index + 1)}
