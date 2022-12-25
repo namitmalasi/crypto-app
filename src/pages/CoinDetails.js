@@ -21,12 +21,15 @@ import { useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import { server } from "../index";
 import Error from "../components/Error";
+import Chart from "../components/Chart";
 
 const CoinDetails = () => {
   const [coin, setCoin] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [currency, setCurrency] = useState("inr");
+  const [days, setDays] = useState("24h");
+  const [chartArray, setChartArray] = useState([]);
 
   const currencySymbol =
     currency === "inr" ? "₹" : currency === "eur" ? "€" : "$";
@@ -38,7 +41,12 @@ const CoinDetails = () => {
       try {
         const { data } = await axios.get(`${server}/coins/${params.id}`);
 
+        const { data: chartData } = await axios.get(
+          `${server}/coins/${params.id}/market_chart?vs_currency=${currency}&days=${days}`
+        );
+
         setCoin(data);
+        setChartArray(chartData.prices);
         setLoading(false);
       } catch (error) {
         setError(true);
@@ -47,7 +55,7 @@ const CoinDetails = () => {
     };
 
     fetchCoin();
-  }, [params.id]);
+  }, [params.id, days, currency]);
 
   if (error) return <Error message="Error while fetching Coin" />;
 
@@ -58,7 +66,7 @@ const CoinDetails = () => {
       ) : (
         <>
           <Box width={"full"} borderWidth={1}>
-            asdf
+            <Chart arr={chartArray} currency={currencySymbol} days={days} />
           </Box>
 
           {/* Button */}
@@ -113,10 +121,41 @@ const CoinDetails = () => {
               high={`${currencySymbol}${coin.market_data.high_24h[currency]}`}
               low={`${currencySymbol}${coin.market_data.low_24h[currency]}`}
             />
+
+            <Box w={"full"} p="4">
+              <Item title={"Max Supply"} value={coin.market_data.max_supply} />
+              <Item
+                title={"Circulating Supply"}
+                value={coin.market_data.circulating_supply}
+              />
+              <Item
+                title={"Market Cap"}
+                value={`${currencySymbol}${coin.market_data.market_cap[currency]}`}
+              />
+              <Item
+                title={"All time low"}
+                value={`${currencySymbol}${coin.market_data.atl[currency]}`}
+              />
+              <Item
+                title={"All time high"}
+                value={`${currencySymbol}${coin.market_data.ath[currency]}`}
+              />
+            </Box>
           </VStack>
         </>
       )}
     </Container>
+  );
+};
+
+const Item = ({ title, value }) => {
+  return (
+    <HStack justifyContent={"space-between"} w={"full"} my="4">
+      <Text fontFamily={"Bebas Neue"} letterSpacing={"widest"}>
+        {title}
+      </Text>
+      <Text>{value}</Text>
+    </HStack>
   );
 };
 
