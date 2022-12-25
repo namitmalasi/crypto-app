@@ -1,4 +1,4 @@
-import { Avatar, Box, Stack, Text, VStack } from "@chakra-ui/react";
+import { Box, Stack, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 
 const Footer = () => {
