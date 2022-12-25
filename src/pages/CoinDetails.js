@@ -1,6 +1,7 @@
 import {
   Badge,
   Box,
+  Button,
   Container,
   HStack,
   Image,
@@ -36,6 +37,50 @@ const CoinDetails = () => {
 
   const params = useParams();
 
+  const btns = ["24h", "7d", "14d", "30d", "60d", "200d", "365d", "max"];
+
+  const switchChartStats = (key) => {
+    switch (key) {
+      case "24h":
+        setDays("24h");
+        setLoading(true);
+        break;
+      case "7d":
+        setDays("7d");
+        setLoading(true);
+        break;
+      case "14d":
+        setDays("14d");
+        setLoading(true);
+        break;
+      case "30d":
+        setDays("30d");
+        setLoading(true);
+        break;
+      case "60d":
+        setDays("60d");
+        setLoading(true);
+        break;
+      case "200d":
+        setDays("200d");
+        setLoading(true);
+        break;
+      case "365d":
+        setDays("365d");
+        setLoading(true);
+        break;
+      case "max":
+        setDays("max");
+        setLoading(true);
+        break;
+
+      default:
+        setDays("24h");
+        setLoading(true);
+        break;
+    }
+  };
+
   useEffect(() => {
     const fetchCoin = async () => {
       try {
@@ -69,7 +114,13 @@ const CoinDetails = () => {
             <Chart arr={chartArray} currency={currencySymbol} days={days} />
           </Box>
 
-          {/* Button */}
+          <HStack p="4" wrap={"wrap"}>
+            {btns.map((i) => (
+              <Button key={i} onClick={() => switchChartStats(i)}>
+                {i}
+              </Button>
+            ))}
+          </HStack>
 
           <RadioGroup value={currency} onChange={setCurrency} p={"8"}>
             <HStack spacing={"4"}>
@@ -161,7 +212,7 @@ const Item = ({ title, value }) => {
 
 const CustomBar = ({ high, low }) => {
   return (
-    <VStack>
+    <VStack w={"full"}>
       <Progress value={50} colorScheme={"teal"} w={"full"} />
       <HStack justifyContent={"space-between"} w={"full"}>
         <Badge children={low} colorScheme={"red"} />
