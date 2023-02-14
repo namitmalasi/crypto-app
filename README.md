@@ -1,4 +1,4 @@
-# QUIZIO
+# CryptoN
 
 - CryptoN is an application where users get information regarding crypto coins and exchanges
   from coingecko API.
